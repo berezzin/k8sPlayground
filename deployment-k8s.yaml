@@ -12,14 +12,17 @@ spec:
     metadata:
       name: app-deployment
       labels:
-        app: app-deployment
+        app: app-deployment      # service will connect by this labels
     spec:
       containers:
         - name: app-deployment
-          image: berezzin/simple-app:v2
+          image: berezzin/simple-app
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: app-secrets
       restartPolicy: Always
 
 ---
