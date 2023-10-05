@@ -1,0 +1,35 @@
+version: '3.0'
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "14000:14000"
+    volumes:
+      - ./nginx/app.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
+    networks:
+      - custom
+
+  web:
+    build:
+      context: .
+    env_file:
+      - .env
+    restart: on-failure
+    deploy:
+      replicas: 4
+    expose:
+      - 8080
+    networks:
+      - custom
+
+networks:
+  custom:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 2008:0DB8::/112
